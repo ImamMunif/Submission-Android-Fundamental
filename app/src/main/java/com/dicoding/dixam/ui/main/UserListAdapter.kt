@@ -1,11 +1,13 @@
 package com.dicoding.dixam.ui.main
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dicoding.dixam.data.response.ItemsItem
 import com.dicoding.dixam.databinding.ItemLayoutBinding
+import com.dicoding.dixam.ui.detail.UserDetailActivity
 
 class UserListAdapter(private val githubUserList: List<ItemsItem>) :
     RecyclerView.Adapter<UserListAdapter.UserViewHolder>() {
@@ -22,11 +24,11 @@ class UserListAdapter(private val githubUserList: List<ItemsItem>) :
                 .fitCenter()
                 .into(binding.imgItemAvatar)
 
-//            binding.itemLayout.setOnClickListener {
-//                val intent = Intent(itemView.context, DetailUserActivity::class.java)
-//                intent.putExtra("username", githubUser.login)
-//                itemView.context.startActivity(intent)
-//            }
+            binding.itemLayout.setOnClickListener {
+                val intent = Intent(itemView.context, UserDetailActivity::class.java)
+                intent.putExtra("username", githubUser.login)
+                itemView.context.startActivity(intent)
+            }
         }
     }
 
