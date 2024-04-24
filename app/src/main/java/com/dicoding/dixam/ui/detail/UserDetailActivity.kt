@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import com.bumptech.glide.Glide
 import com.dicoding.dixam.R
 import com.dicoding.dixam.databinding.ActivityUserDetailBinding
+import com.dicoding.dixam.ui.follow.SectionsPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
 class UserDetailActivity : AppCompatActivity() {
@@ -15,12 +16,21 @@ class UserDetailActivity : AppCompatActivity() {
     private val userDetailViewModel by viewModels<UserDetailViewModel>()
     private lateinit var username: String
 
+    companion object {
+        private val TAB_TITLES = listOf(
+            R.string.tab_text_1,
+            R.string.tab_text_2
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setUserData()
+
+        setViewPager()
     }
 
     private fun setUserData() {
@@ -48,6 +58,16 @@ class UserDetailActivity : AppCompatActivity() {
             binding.tvFollowers.text = followersText
             binding.tvFollowing.text = followingText
         }
+    }
+
+    private fun setViewPager() {
+        val adapter = SectionsPagerAdapter(this, username)
+        binding.viewPager.adapter = adapter
+
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            val tabText = this.getString(TAB_TITLES[position])
+            tab.text = tabText
+        }.attach()
     }
 
     private fun showLoading(isLoading: Boolean) {
