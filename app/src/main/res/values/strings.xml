@@ -12,5 +12,6 @@
     <string name="tab_text_2">following</string>
     <string name="no_followers">Don\'t have any follower</string>
     <string name="no_following">Following no one</string>
+    <string name="favorite_desc">Add to favorite</string>
 
 </resources>
