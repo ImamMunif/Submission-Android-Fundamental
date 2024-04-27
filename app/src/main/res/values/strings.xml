@@ -13,5 +13,6 @@
     <string name="no_followers">Don\'t have any follower</string>
     <string name="no_following">Following no one</string>
     <string name="favorite_desc">Add to favorite</string>
+    <string name="initial_query_username">arif</string>
 
 </resources>

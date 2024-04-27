@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.dixam.R
 import com.dicoding.dixam.databinding.FragmentFollowBinding
 import com.dicoding.dixam.ui.main.UserListAdapter
 

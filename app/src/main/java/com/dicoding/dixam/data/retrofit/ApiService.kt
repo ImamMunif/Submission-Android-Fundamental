@@ -11,8 +11,8 @@ import retrofit2.http.Query
 interface ApiService {
 
     @GET("search/users")
-    fun getUser(@Query("q") login: String
-    ): Call<GithubResponse>
+    fun getUsers(@Query("q") login: String
+    ): GithubResponse
 
     @GET("users/{username}")
     fun getUserDetail(
