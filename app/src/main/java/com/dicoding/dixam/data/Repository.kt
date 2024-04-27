@@ -1,5 +1,6 @@
 package com.dicoding.dixam.data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.dicoding.dixam.data.response.ItemsItem
@@ -14,8 +15,11 @@ class Repository(
         emit(Result.Loading)
         try {
             val response = apiService.getUsers(username)
+            Log.d("Debug1", response.toString())
             emit(Result.Success(response.items))
+
         } catch (e: Exception) {
+            Log.d("Debug3", e.message.toString())
             emit(Result.Error(e.message.toString()))
         }
     }
