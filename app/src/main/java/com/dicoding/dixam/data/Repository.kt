@@ -19,7 +19,7 @@ class Repository(
             emit(Result.Success(response.items))
 
         } catch (e: Exception) {
-            Log.d("Debug3", e.message.toString())
+            Log.d("Debug2", e.message.toString())
             emit(Result.Error(e.message.toString()))
         }
     }

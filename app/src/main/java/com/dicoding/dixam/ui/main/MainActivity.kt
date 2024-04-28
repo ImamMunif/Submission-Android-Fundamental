@@ -4,9 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.dixam.R
 import com.dicoding.dixam.data.Result
 import com.dicoding.dixam.databinding.ActivityMainBinding
 import com.dicoding.dixam.ui.ViewModelFactory
@@ -27,11 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         setRecyclerViewData()
 
-        findUsersList(getString(R.string.initial_query_username))
-    }
-
-    private fun findUsersList(username: String) {
-        userViewModel.setUsername(username).observe(this) {
+        userViewModel.userList.observe(this) {
             when (it) {
                 is Result.Loading -> showLoading(true)
                 is Result.Error -> {
@@ -42,6 +36,8 @@ class MainActivity : AppCompatActivity() {
                     adapter = UserListAdapter((it.data))
                     binding.rvUsersList.adapter = adapter
                 }
+
+                else -> {}
             }
         }
     }
@@ -56,8 +52,8 @@ class MainActivity : AppCompatActivity() {
                 .editText
                 .setOnEditorActionListener { _, _, _ ->
                     searchBar.setText(searchView.text)
-                    findUsersList(searchBar.text.toString())
                     searchView.hide()
+                    userViewModel.setUsername(searchBar.text.toString())
                     false
                 }
         }
