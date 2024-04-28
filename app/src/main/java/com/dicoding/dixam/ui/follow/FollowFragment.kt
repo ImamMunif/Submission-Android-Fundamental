@@ -2,6 +2,7 @@ package com.dicoding.dixam.ui.follow
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -54,6 +55,7 @@ class FollowFragment : Fragment() {
                 }
 
                 is Result.Success -> {
+                    showLoading(false)
                     adapter = UserListAdapter(it.data)
                     binding.rvFollowList.adapter = adapter
                 }
@@ -61,6 +63,8 @@ class FollowFragment : Fragment() {
         }
 
         followViewModel.followingList.observe(viewLifecycleOwner) {
+            Log.d("Debug1", it.toString())
+
             when (it) {
                 is Result.Loading -> showLoading(true)
                 is Result.Error -> {
@@ -68,6 +72,7 @@ class FollowFragment : Fragment() {
                 }
 
                 is Result.Success -> {
+                    showLoading(false)
                     adapter = UserListAdapter(it.data)
                     binding.rvFollowList.adapter = adapter
                 }

@@ -1,6 +1,7 @@
 package com.dicoding.dixam.ui.follow
 
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -27,6 +28,7 @@ class FollowViewModel(private val repository: Repository) : ViewModel() {
     fun getFollowingList(username: String) {
         val liveData = repository.getFollowingUser(username)
         _followingList.addSource(liveData) { result ->
+            Log.d("DebugGetUserFollowingList", result.toString())
             _followingList.value = result
         }
     }
