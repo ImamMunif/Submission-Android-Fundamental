@@ -7,6 +7,7 @@ import com.dicoding.dixam.database.FavoriteUserDAO
 import com.dicoding.dixam.data.response.UserDetailResponse
 import com.dicoding.dixam.data.response.ItemsItem
 import com.dicoding.dixam.data.retrofit.ApiService
+import com.dicoding.dixam.database.FavoriteUser
 import kotlinx.coroutines.Dispatchers
 
 class Repository(
@@ -41,7 +42,7 @@ class Repository(
         }
 
     fun getFollowerUser(username: String): LiveData<Result<List<ItemsItem>>> =
-        liveData(Dispatchers.IO){
+        liveData(Dispatchers.IO) {
             emit(Result.Loading)
             try {
                 val response = apiService.getFollowers(username)
@@ -54,7 +55,7 @@ class Repository(
         }
 
     fun getFollowingUser(username: String): LiveData<Result<List<ItemsItem>>> =
-        liveData(Dispatchers.IO){
+        liveData(Dispatchers.IO) {
             emit(Result.Loading)
             try {
                 val response = apiService.getFollowings(username)
@@ -65,6 +66,16 @@ class Repository(
                 emit(Result.Error(e.message.toString()))
             }
         }
+
+    fun isFavorited(username: String): LiveData<Boolean> = favoriteUserDao.isFavorited(username)
+
+    suspend fun addFavorite(favorite: FavoriteUser) {
+        favoriteUserDao.insert(favorite)
+    }
+
+    suspend fun removeFavorite(favorite: FavoriteUser) {
+        favoriteUserDao.delete(favorite)
+    }
 
     companion object {
         @Volatile

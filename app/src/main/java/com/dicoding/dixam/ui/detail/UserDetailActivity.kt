@@ -3,11 +3,13 @@ package com.dicoding.dixam.ui.detail
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.dicoding.dixam.R
 import com.dicoding.dixam.data.response.UserDetailResponse
 import com.dicoding.dixam.data.Result
+import com.dicoding.dixam.database.FavoriteUser
 import com.dicoding.dixam.databinding.ActivityUserDetailBinding
 import com.dicoding.dixam.ui.ViewModelFactory
 import com.dicoding.dixam.ui.follow.SectionsPagerAdapter
@@ -18,6 +20,7 @@ class UserDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserDetailBinding
     private lateinit var username: String
     private lateinit var userDetailViewModel: UserDetailViewModel
+    private lateinit var userDetail: UserDetailResponse
 
     companion object {
         private val TAB_TITLES = listOf(
@@ -48,6 +51,39 @@ class UserDetailActivity : AppCompatActivity() {
                 is Result.Success -> {
                     showLoading(false)
                     setUserData(it.data)
+                    userDetail = it.data
+                }
+            }
+
+            val fabFavorited = binding.fabFavorite
+            userDetailViewModel.isFavorited(username)
+            userDetailViewModel.isFavorited.observe(this) {
+                when (it) {
+                    true -> {
+                        fabFavorited.setImageDrawable(
+                            ContextCompat.getDrawable(
+                                fabFavorited.context,
+                                R.drawable.ic_favorite_24
+                            )
+                        )
+                        fabFavorited.setOnClickListener {
+                            val favoriteUser = FavoriteUser(userDetail.login, userDetail.avatarUrl)
+                            userDetailViewModel.removeFavorite(favoriteUser)
+                        }
+                    }
+
+                    false -> {
+                        fabFavorited.setImageDrawable(
+                            ContextCompat.getDrawable(
+                                fabFavorited.context,
+                                R.drawable.ic_favorite_border_24
+                            )
+                        )
+                        fabFavorited.setOnClickListener {
+                            val favoriteUser = FavoriteUser(userDetail.login, userDetail.avatarUrl)
+                            userDetailViewModel.addFavorite(favoriteUser)
+                        }
+                    }
                 }
             }
         }
