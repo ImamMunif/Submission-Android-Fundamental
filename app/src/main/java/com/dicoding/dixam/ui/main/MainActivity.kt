@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
                 is Result.Error -> {
                     showLoading(false)
                 }
+
                 is Result.Success -> {
                     showLoading(false)
                     adapter = UserListAdapter((it.data))
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                 .setOnEditorActionListener { _, _, _ ->
                     searchBar.setText(searchView.text)
                     searchView.hide()
-                    userViewModel.setUsername(searchBar.text.toString())
+                    userViewModel.findUsers(searchBar.text.toString())
                     false
                 }
         }

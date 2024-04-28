@@ -1,20 +1,23 @@
 package com.dicoding.dixam.ui.detail
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.dicoding.dixam.R
+import com.dicoding.dixam.data.response.UserDetailResponse
+import com.dicoding.dixam.data.Result
 import com.dicoding.dixam.databinding.ActivityUserDetailBinding
+import com.dicoding.dixam.ui.ViewModelFactory
 import com.dicoding.dixam.ui.follow.SectionsPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
 class UserDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUserDetailBinding
-    private val userDetailViewModel by viewModels<UserDetailViewModel>()
     private lateinit var username: String
+    private lateinit var userDetailViewModel: UserDetailViewModel
 
     companion object {
         private val TAB_TITLES = listOf(
@@ -28,36 +31,45 @@ class UserDetailActivity : AppCompatActivity() {
         binding = ActivityUserDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setUserData()
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
+        userDetailViewModel = ViewModelProvider(this, factory)[UserDetailViewModel::class.java]
+
+        username = intent.getStringExtra("username") ?: "DefaultUsername"
+
+        userDetailViewModel.getUserDetail(username)
+
+        userDetailViewModel.userDetail.observe(this) {
+            when (it) {
+                is Result.Loading -> showLoading(true)
+                is Result.Error -> {
+                    showLoading(false)
+                }
+
+                is Result.Success -> {
+                    showLoading(false)
+                    setUserData(it.data)
+                }
+            }
+        }
 
         setViewPager()
     }
 
-    private fun setUserData() {
-        username = intent.getStringExtra("username") ?: "DefaultUsername"
+    private fun setUserData(userDetail: UserDetailResponse) {
+        Glide
+            .with(this)
+            .load(userDetail.avatarUrl)
+            .fitCenter()
+            .into(binding.imgDetailItemAvatar)
 
-        userDetailViewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
+        binding.tvDetailUsername.text = userDetail.login
+        binding.tvDetailFullname.text = userDetail.name
 
-        userDetailViewModel.getUserDetail(username)
+        val followersText = getString(R.string.followers, userDetail.followers.toString())
+        val followingText = getString(R.string.following, userDetail.following.toString())
 
-        userDetailViewModel.userDetail.observe(this) { userDetail ->
-            Glide
-                .with(this)
-                .load(userDetail.avatarUrl)
-                .fitCenter()
-                .into(binding.imgDetailItemAvatar)
-
-            binding.tvDetailUsername.text = userDetail.login
-            binding.tvDetailFullname.text = userDetail.name
-
-            val followersText = getString(R.string.followers, userDetail.followers.toString())
-            val followingText = getString(R.string.following, userDetail.following.toString())
-
-            binding.tvFollowers.text = followersText
-            binding.tvFollowing.text = followingText
-        }
+        binding.tvFollowers.text = followersText
+        binding.tvFollowing.text = followingText
     }
 
     private fun setViewPager() {
@@ -71,7 +83,7 @@ class UserDetailActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        with(binding){
+        with(binding) {
             tvDetailUsername.visibility = if (isLoading) View.GONE else View.VISIBLE
             tvDetailFullname.visibility = if (isLoading) View.GONE else View.VISIBLE
             tvFollowers.visibility = if (isLoading) View.GONE else View.VISIBLE

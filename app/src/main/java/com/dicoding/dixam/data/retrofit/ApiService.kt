@@ -15,9 +15,9 @@ interface ApiService {
     ): GithubResponse
 
     @GET("users/{username}")
-    fun getUserDetail(
+    suspend fun getUserDetail(
         @Path("username") username: String
-    ): Call<UserDetailResponse>
+    ): UserDetailResponse
 
     @GET("users/{username}/followers")
     fun getFollowers(
