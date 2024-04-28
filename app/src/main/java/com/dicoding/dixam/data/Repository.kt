@@ -18,11 +18,11 @@ class Repository(
             emit(Result.Loading)
             try {
                 val response = apiService.getUsers(username)
-                Log.d("Debug1", response.toString())
+                Log.d("Debug1findUser", response.toString())
                 emit(Result.Success(response.items))
 
             } catch (e: Exception) {
-                Log.d("Debug2", e.message.toString())
+                Log.d("Debug2findUser", e.message.toString())
                 emit(Result.Error(e.message.toString()))
             }
         }
@@ -32,8 +32,36 @@ class Repository(
             emit(Result.Loading)
             try {
                 val response = apiService.getUserDetail(username)
+                Log.d("Debug3getUserDetail", response.toString())
                 emit(Result.Success(response))
             } catch (e: Exception) {
+                Log.d("Debug4getUserDetail", e.message.toString())
+                emit(Result.Error(e.message.toString()))
+            }
+        }
+
+    fun getFollowerUser(username: String): LiveData<Result<List<ItemsItem>>> =
+        liveData(Dispatchers.IO){
+            emit(Result.Loading)
+            try {
+                val response = apiService.getFollowers(username)
+                Log.d("Debug5getUserFollower", response.toString())
+                emit(Result.Success(response))
+            } catch (e: Exception) {
+                Log.d("Debug6getUserFollower", e.message.toString())
+                emit(Result.Error(e.message.toString()))
+            }
+        }
+
+    fun getFollowingUser(username: String): LiveData<Result<List<ItemsItem>>> =
+        liveData(Dispatchers.IO){
+            emit(Result.Loading)
+            try {
+                val response = apiService.getFollowings(username)
+                Log.d("Debug7getUserFollowing", response.toString())
+                emit(Result.Success(response))
+            } catch (e: Exception) {
+                Log.d("Debug8getUserFollowing", e.message.toString())
                 emit(Result.Error(e.message.toString()))
             }
         }

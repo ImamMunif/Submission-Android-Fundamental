@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.dicoding.dixam.data.Repository
 import com.dicoding.dixam.di.Injection
 import com.dicoding.dixam.ui.detail.UserDetailViewModel
+import com.dicoding.dixam.ui.follow.FollowViewModel
 import com.dicoding.dixam.ui.main.UserViewModel
 
 class ViewModelFactory private constructor(private val repository: Repository) :
@@ -23,13 +24,11 @@ class ViewModelFactory private constructor(private val repository: Repository) :
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         when {
-            modelClass.isAssignableFrom(UserViewModel::class.java) -> return UserViewModel(
-                repository
-            ) as T
+            modelClass.isAssignableFrom(UserViewModel::class.java) -> return UserViewModel(repository) as T
 
-            modelClass.isAssignableFrom(UserDetailViewModel::class.java) -> return UserDetailViewModel(
-                repository
-            ) as T
+            modelClass.isAssignableFrom(UserDetailViewModel::class.java) -> return UserDetailViewModel(repository) as T
+
+            modelClass.isAssignableFrom(FollowViewModel::class.java) -> return  FollowViewModel(repository) as T
 
             // ...
             // Others view model

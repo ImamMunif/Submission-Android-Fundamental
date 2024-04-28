@@ -20,13 +20,13 @@ interface ApiService {
     ): UserDetailResponse
 
     @GET("users/{username}/followers")
-    fun getFollowers(
+    suspend fun getFollowers(
         @Path("username") username: String
-    ): Call<List<ItemsItem>>
+    ): List<ItemsItem>
 
     @GET("users/{username}/following")
-    fun getFollowings(
+    suspend fun getFollowings(
         @Path("username") username: String
-    ): Call<List<ItemsItem>>
+    ): List<ItemsItem>
 
 }

@@ -7,13 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.dixam.data.Result
 import com.dicoding.dixam.databinding.FragmentFollowBinding
+import com.dicoding.dixam.ui.ViewModelFactory
 import com.dicoding.dixam.ui.main.UserListAdapter
 
 class FollowFragment : Fragment() {
 
     private lateinit var binding: FragmentFollowBinding
     private lateinit var adapter: UserListAdapter
+    private lateinit var followViewModel: FollowViewModel
     private lateinit var username: String
     private var position: Int = 0
 
@@ -40,27 +43,42 @@ class FollowFragment : Fragment() {
         val layoutManager = LinearLayoutManager(requireContext())
         binding.rvFollowList.layoutManager = layoutManager
 
-        if (isAdded && !isDetached) {
-            val userFollowViewModel = ViewModelProvider(
-                this,
-                ViewModelProvider.NewInstanceFactory()
-            )[FollowViewModel::class.java]
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(requireContext())
+        followViewModel = ViewModelProvider(this, factory)[FollowViewModel::class.java]
 
-            userFollowViewModel.isLoading.observe(viewLifecycleOwner) {
-                showLoading(it)
-            }
+        followViewModel.followerList.observe(viewLifecycleOwner) {
+            when (it) {
+                is Result.Loading -> showLoading(true)
+                is Result.Error -> {
+                    showLoading(false)
+                }
 
-            userFollowViewModel.followList.observe(viewLifecycleOwner) { followList ->
-                if (followList != null) {
-                    adapter = UserListAdapter(followList)
+                is Result.Success -> {
+                    adapter = UserListAdapter(it.data)
                     binding.rvFollowList.adapter = adapter
                 }
             }
+        }
 
-            if (position == 1){
-                userFollowViewModel.getFollowList(username, "follower")
+        followViewModel.followingList.observe(viewLifecycleOwner) {
+            when (it) {
+                is Result.Loading -> showLoading(true)
+                is Result.Error -> {
+                    showLoading(false)
+                }
+
+                is Result.Success -> {
+                    adapter = UserListAdapter(it.data)
+                    binding.rvFollowList.adapter = adapter
+                }
+            }
+        }
+
+        if (isAdded && !isDetached) {
+            if (position == 1) {
+                followViewModel.getFollowerList(username)
             } else {
-                userFollowViewModel.getFollowList(username, "following")
+                followViewModel.getFollowingList(username)
             }
         }
     }
