@@ -4,13 +4,19 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.dixam.R
 import com.dicoding.dixam.data.Result
+import com.dicoding.dixam.data.SettingPreferences
+import com.dicoding.dixam.data.dataStore
 import com.dicoding.dixam.databinding.ActivityMainBinding
 import com.dicoding.dixam.ui.ViewModelFactory
 import com.dicoding.dixam.ui.favorite.FavoriteActivity
+import com.dicoding.dixam.ui.settings.SettingsActivity
+import com.dicoding.dixam.ui.settings.SettingsViewModel
+import com.example.github_user_app.util.SettingsViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,6 +31,8 @@ class MainActivity : AppCompatActivity() {
 
         val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
         userViewModel = ViewModelProvider(this, factory)[UserViewModel::class.java]
+
+        setTheme()
 
         setRecyclerViewData()
 
@@ -48,9 +56,31 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setTheme() {
+        val preference = SettingPreferences.getInstance(application.dataStore)
+
+        val settingsViewModel = ViewModelProvider(
+            this,
+            SettingsViewModelFactory(preference)
+        )[SettingsViewModel::class.java]
+
+        settingsViewModel.getThemeSettings().observe(this) { isDarkModeActive: Boolean ->
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+    }
+
     private fun setMainMenu(){
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.action_settings -> {
+                    val intent = Intent(this, SettingsActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
                 R.id.menu_favorite -> {
                     val intent = Intent(this, FavoriteActivity::class.java)
                     startActivity(intent)
