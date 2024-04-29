@@ -14,5 +14,8 @@
     <string name="no_following">Following no one</string>
     <string name="favorite_desc">Add to favorite</string>
     <string name="initial_query_username">arif</string>
+    <string name="title_favorite_users">Favorite Users</string>
+    <string name="title_favorite_users_btn">Favorite Users</string>
+    <string name="settings">Settings</string>
 
 </resources>

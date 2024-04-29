@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.dicoding.dixam.data.Repository
 import com.dicoding.dixam.di.Injection
 import com.dicoding.dixam.ui.detail.UserDetailViewModel
+import com.dicoding.dixam.ui.favorite.FavoriteUserViewModel
 import com.dicoding.dixam.ui.follow.FollowViewModel
 import com.dicoding.dixam.ui.main.UserViewModel
 
@@ -28,11 +29,11 @@ class ViewModelFactory private constructor(private val repository: Repository) :
 
             modelClass.isAssignableFrom(UserDetailViewModel::class.java) -> return UserDetailViewModel(repository) as T
 
-            modelClass.isAssignableFrom(FollowViewModel::class.java) -> return  FollowViewModel(repository) as T
+            modelClass.isAssignableFrom(FollowViewModel::class.java) -> return FollowViewModel(repository) as T
 
-            // ...
-            // Others view model
-            // ...
+            modelClass.isAssignableFrom(FavoriteUserViewModel::class.java) -> return FavoriteUserViewModel(repository) as T
+
+            // ... Others view model ...
         }
         throw IllegalArgumentException("Invalid reference view model class: " + modelClass.name)
     }

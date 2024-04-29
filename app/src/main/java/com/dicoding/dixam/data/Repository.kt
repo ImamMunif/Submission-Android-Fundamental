@@ -41,7 +41,7 @@ class Repository(
             }
         }
 
-    fun getFollowerUser(username: String): LiveData<Result<List<ItemsItem>>> =
+    fun getFollowerUsers(username: String): LiveData<Result<List<ItemsItem>>> =
         liveData(Dispatchers.IO) {
             emit(Result.Loading)
             try {
@@ -54,7 +54,7 @@ class Repository(
             }
         }
 
-    fun getFollowingUser(username: String): LiveData<Result<List<ItemsItem>>> =
+    fun getFollowingUsers(username: String): LiveData<Result<List<ItemsItem>>> =
         liveData(Dispatchers.IO) {
             emit(Result.Loading)
             try {
@@ -68,6 +68,8 @@ class Repository(
         }
 
     fun isFavorited(username: String): LiveData<Boolean> = favoriteUserDao.isFavorited(username)
+
+    fun getFavoriteUsers():LiveData<List<FavoriteUser>> = favoriteUserDao.getFavoriteUsers()
 
     suspend fun addFavorite(favorite: FavoriteUser) {
         favoriteUserDao.insert(favorite)

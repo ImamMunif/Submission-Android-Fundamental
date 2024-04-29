@@ -18,22 +18,8 @@
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            app:menu="@menu/menu_main"
-            app:title="@string/app_name" />
+            app:title="@string/title_favorite_users" />
 
-        <com.google.android.material.search.SearchBar
-            android:id="@+id/searchBar"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="8dp"
-            android:hint="@string/searchbar_hint"
-            app:layout_constraintBottom_toBottomOf="@id/appBarLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <ProgressBar
@@ -48,18 +34,8 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
-    <com.google.android.material.search.SearchView
-        android:id="@+id/searchView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:hint="@string/searchbar_hint"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvUsersList"
+        android:id="@+id/rvFavoriteUsers"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"

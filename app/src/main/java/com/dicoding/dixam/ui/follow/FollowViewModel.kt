@@ -19,14 +19,14 @@ class FollowViewModel(private val repository: Repository) : ViewModel() {
     val followingList: LiveData<Result<List<ItemsItem>>> = _followingList
 
     fun getFollowerList(username: String) {
-        val liveData = repository.getFollowerUser(username)
+        val liveData = repository.getFollowerUsers(username)
         _followerList.addSource(liveData) { result ->
             _followerList.value = result
         }
     }
 
     fun getFollowingList(username: String) {
-        val liveData = repository.getFollowingUser(username)
+        val liveData = repository.getFollowingUsers(username)
         _followingList.addSource(liveData) { result ->
             Log.d("DebugGetUserFollowingList", result.toString())
             _followingList.value = result

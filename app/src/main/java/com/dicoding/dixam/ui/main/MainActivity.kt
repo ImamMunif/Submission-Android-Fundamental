@@ -1,13 +1,16 @@
 package com.dicoding.dixam.ui.main
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.dixam.R
 import com.dicoding.dixam.data.Result
 import com.dicoding.dixam.databinding.ActivityMainBinding
 import com.dicoding.dixam.ui.ViewModelFactory
+import com.dicoding.dixam.ui.favorite.FavoriteActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,6 +28,8 @@ class MainActivity : AppCompatActivity() {
 
         setRecyclerViewData()
 
+        setMainMenu()
+
         userViewModel.userList.observe(this) {
             when (it) {
                 is Result.Loading -> showLoading(true)
@@ -39,6 +44,19 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 else -> {}
+            }
+        }
+    }
+
+    private fun setMainMenu(){
+        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_favorite -> {
+                    val intent = Intent(this, FavoriteActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                else -> false
             }
         }
     }
